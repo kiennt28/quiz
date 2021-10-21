@@ -32,42 +32,81 @@ var allQuestions = [
     },
     correctAnswer: "C",
   },
+  {
+    question: "Một anh thanh niên đánh 1 bà già hỏi anh ấy mất gì?",
+    answers: {
+      A: "Mất tiền",
+      B: "Mất trí",
+      C: "Mất sức",
+      D: "Mất dạy",
+    },
+    correctAnswer: "D",
+  },
 ];
 
 function buildQuiz() {
   const output = [];
+  var n = 0;
   for (let i = 0; i < allQuestions.length; i++) {
+    n += 1;
     const answers = [];
     for (let index = 0; index < allQuestions[i].length; index++) {}
-    console.log(allQuestions[i]);
-    console.log(i);
+    // console.log(allQuestions[i]);
+    // console.log(i);
     for (const key in allQuestions[i].answers) {
-      console.log(allQuestions[i].answers);
+      // console.log(allQuestions[i].answers);
       answers.push(
         `<label>
-        <input type="radio" name="question$[i]" value="${key}">
+        <input type="radio" name="question${i}" value="${key}">
         ${key} :
         ${allQuestions[i].answers[key]}
         </label>`
       );
     }
     output.push(
-      `<div class="question"> ${allQuestions[i].question}</div>
-    <div class="answers"> ${answers.join("")}</div>`
+      "Câu: " +
+        n +
+        `<div class="question"> ${allQuestions[i].question}</div>
+    <div class="answers mt-3"> ${answers.join("")}</div>`
     );
   }
   quizContainer.innerHTML = output.join("");
-  // allQuestions.forEach(function (currentQuestion, questionNumber) {
-  //   console.log(currentQuestion);
-  //   console.log(questionNumber);
-  // });
+}
+
+function showResults() {
+  const answerContainers = quizContainer.querySelectorAll(".answers");
+  let numCorrect = 0;
+
+  for (let j = 0; j < allQuestions.length; j++) {
+    for (let index = 0; index < allQuestions[j].length; index++) {}
+    // console.log(allQuestions[j]);
+    const selector = `input[name=question${j}]:checked`;
+    const userAnswer = (answerContainers[j].querySelector(selector) || {})
+      .value;
+    console.log(answerContainers[j].querySelector(selector));
+    if (userAnswer === allQuestions[j].correctAnswer) {
+      numCorrect++;
+
+      answerContainers[j].style.color = "lightgreen";
+    } else {
+      answerContainers[j].style.color = "red";
+    }
+  }
+  resultsContainer.innerHTML =
+    `Số câu đúng: ` + `${numCorrect}/${allQuestions.length}`;
 }
 
 buildQuiz();
 
-// function buildQuiz() {
+submitButton.addEventListener("click", showResults);
+
+/* Use Foreach */
+//----------------------------------------------------------------
+// function buildQuiz()
+
 //   const output = [];
 //   var index = 0;
+
 //   allQuestions.forEach((currentQuestion, questionNumber) => {
 //     index += 1;
 //     const answers = [];
@@ -85,7 +124,6 @@ buildQuiz();
 //       );
 //       console.log(letter);
 //     }
-
 //     output.push(
 //       "Câu " +
 //         index +
@@ -98,4 +136,28 @@ buildQuiz();
 //   quizContainer.innerHTML = output.join("");
 // }
 
+// function showResults() {
+
+//   const answerContainers = quizContainer.querySelectorAll(".answers");
+//   let numCorrect = 0;
+
+//   allQuestions.forEach((currentQuestion, questionNumber) => {
+
+//     console.log(currentQuestion);
+//     const answerContainer = answerContainers[questionNumber];
+//     const selector = `input[name=question${questionNumber}]:checked`;
+//     const userAnswer = (answerContainer.querySelector(selector) || {}).value;
+
+//     if (userAnswer === currentQuestion.correctAnswer) {
+//       numCorrect++;
+//       answerContainers[questionNumber].style.color = "lightgreen";
+//     } else {
+//       answerContainers[questionNumber].style.color = "red";
+//     }
+//   });
+//   resultsContainer.innerHTML = `${numCorrect} / ${allQuestions.length}`;
+// }
+
 // buildQuiz();
+
+// submitButton.addEventListener("click", showResults);
